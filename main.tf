@@ -43,22 +43,22 @@ module "sg" {
 }
 
 
-# module "ec2" {
-#   source = "./modules/ec2"
-#   prefix = var.prefix
-#   client = var.client
+module "ec2" {
+  source = "./modules/ec2"
+  prefix = var.prefix
+  client = var.client
 
-#   vpc_main_pub_id = module.vpc.vpc_main_pub_id
+  vpc_main_pub_id = module.vpc.vpc_main_pub_id
 
-#   web_subnet_id_bastion = module.vpc.web_subnet_id_bastion
-#   api_subnet_id_bastion = module.vpc.api_subnet_id_bastion
-#   db_subnet_id_bastion = module.vpc.db_subnet_id_bastion
+  web_subnet_id_bastion = module.vpc.web_subnet_id_bastion
+  api_subnet_id = module.vpc.api_subnet_id
+  db_subnet_id = module.vpc.db_subnet_id
 
-#   sg_developers_id = module.sg.sg_developers_id
-#   sg_bastion_id = module.sg.sg_bastion_id
-#   sg_web_public_id = module.sg.sg_web_public_id
-#   sg_api_private_id = module.sg.sg_api_private_id
-#   sg_db_private_id = module.sg.sg_db_private_id
+  sg_developers_id = module.sg.sg_developers_id
+  sg_bastion_id = module.sg.sg_bastion_id
+  sg_web_public_id = module.sg.sg_web_public_id
+  sg_api_private_id = module.sg.sg_api_private_id
+  sg_db_private_id = module.sg.sg_db_private_id
 
-#   ssh_key_pair = module.ssh.ssh_key_pair
-# }
+  ssh_key_pair = module.ssh.ssh_key_pair
+}
