@@ -92,3 +92,128 @@ resource "aws_security_group" "ec2-bastion-sg" {
     "ambiente" = "dev"
   }
 }
+
+########################################
+# Security group to allow access to the
+# EKS Cluster of Web Apps. The cluster 
+# faces the internet (so far)
+resource "aws_security_group" "web-public-sg" {
+  name = "${var.prefix}-web-public-sg"
+  description = "Web EKS inbound access (internet facing)"
+  vpc_id = var.vpc_main_pub_id
+  ingress {
+    cidr_blocks = ["0.0.0.0/0"]
+    from_port = 80
+    to_port = 80
+    protocol = "tcp"
+    description = "Inbound HTTP connections"
+  }
+  ingress {
+    cidr_blocks = ["0.0.0.0/0"]
+    from_port = 2376
+    to_port = 2376
+    protocol = "tcp"
+    description = "Inbound Rancher connections"
+  }
+  ingress {
+    cidr_blocks = ["0.0.0.0/0"]
+    from_port = 443
+    to_port = 443
+    protocol = "tcp"
+    description = "Inbound HTTPS connections"
+  }
+  egress {
+    cidr_blocks = ["0.0.0.0/0"]
+    from_port = 0
+    to_port = 0
+    protocol = "-1"
+    description = "Outbound communication to anywhere"
+  }
+
+  tags = {
+    "Name" = "${var.prefix}-web-public-sg",
+    "cliente" = var.client,
+    "ambiente" = "dev"
+  }
+}
+
+
+########################################
+# Security group to allow access to the
+# EKS Cluster of the API. The cluster 
+# resides in a private subnet
+resource "aws_security_group" "api-private-sg" {
+  name = "${var.prefix}-api-private-sg"
+  description = "API EKS inbound access (private)"
+  vpc_id = var.vpc_main_pub_id
+  ingress {
+    security_groups = [aws_security_group.web-public-sg.id]
+    from_port = 80
+    to_port = 80
+    protocol = "tcp"
+    description = "Web inbound HTTP connections"
+  }
+  ingress {
+    security_groups = [aws_security_group.web-public-sg.id]
+    from_port = 2376
+    to_port = 2376
+    protocol = "tcp"
+    description = "Web inbound Rancher connections"
+  }
+  ingress {
+    security_groups = [aws_security_group.web-public-sg.id]
+    from_port = 443
+    to_port = 443
+    protocol = "tcp"
+    description = "Web inbound HTTPS connections"
+  }
+  egress {
+    cidr_blocks = ["0.0.0.0/0"]
+    from_port = 0
+    to_port = 0
+    protocol = "-1"
+    description = "Outbound communication to anywhere"
+  }
+  tags = {
+    "Name" = "${var.prefix}-api-private-sg",
+    "cliente" = var.client,
+    "ambiente" = "dev"
+  }
+}
+
+
+########################################
+# Security group to allow access to the
+# RDS Multi-AZ cluster. The cluster is
+# private
+resource "aws_security_group" "db-private-sg" {
+  name = "${var.prefix}-db-private-sg"
+  description = "RDS inbound access (private)"
+  vpc_id = var.vpc_main_pub_id
+  ingress {
+    security_groups = [aws_security_group.api-private-sg.id]
+    from_port = 5432
+    to_port = 5432
+    protocol = "tcp"
+    description = "API inbound Postgres connections"
+  }
+  ingress {
+    security_groups = [aws_security_group.ec2-bastion-sg.id]
+    from_port = 5432
+    to_port = 5432
+    protocol = "tcp"
+    description = "API inbound Postgres connections"
+  }
+  egress {
+    cidr_blocks = ["0.0.0.0/0"]
+    from_port = 0
+    to_port = 0
+    protocol = "-1"
+    description = "Outbound communication to anywhere"
+  }
+  tags = {
+    "Name" = "${var.prefix}-db-private-sg",
+    "cliente" = var.client,
+    "ambiente" = "dev"
+  }
+}
