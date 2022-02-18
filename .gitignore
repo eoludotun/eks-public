@@ -1,0 +1,21 @@
+## environment (local) stuff
+.vscode/
+
+## security stuff
+credentials*.txt
+
+## terraform out files
+.terraform/
+.terraform*.lock*
+terraform.tfs*
+
+## some few configuration files with secrets
+modules/sg/main.tfvars
+
+
+## pem files are out
+*.pem
+.pem/
+
+## configurations files for kubernetes are out
+kubeconfig*
