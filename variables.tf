@@ -1,7 +1,7 @@
-variable "prefix" {}
+variable "region" {}
 
 variable "client" {}
-variable "region" {}
+variable "prefix" {}
 
 variable "retention_days" {}
 
