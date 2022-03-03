@@ -10,6 +10,10 @@ output "api_subnet_ids" {
   value = aws_subnet.api-subnets[*].id
 }
 
+output "db_subnet_ids" {
+  value = aws_subnet.db-subnets[*].id
+}
+
 output "web_subnet_id_bastion" {
   value = aws_subnet.web-subnets[0].id
 }

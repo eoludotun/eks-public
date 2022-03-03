@@ -62,3 +62,20 @@ module "ec2" {
 
   ssh_key_pair = module.ssh.ssh_key_pair
 }
+
+module "rds" {
+  source = "./modules/rds"
+  prefix = var.prefix
+  client = var.client
+
+  # vpc_main_pub_id = module.vpc.vpc_main_pub_id
+
+  db_subnet_ids = module.vpc.db_subnet_ids
+  sg_db_private_id = module.sg.sg_db_private_id
+
+  engine = var.engine
+  engine_version = var.engine_version
+  username = var.username
+  db_name = var.db_name
+  port = var.port
+}

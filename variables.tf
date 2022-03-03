@@ -20,3 +20,9 @@ variable "api_min_size" {}
 variable "db_subnets_size" {}
 
 variable "ip_fake" {}
+
+variable "engine" {}
+variable "engine_version" {}
+variable "username" {}
+variable "db_name" {}
+variable "port" {}
