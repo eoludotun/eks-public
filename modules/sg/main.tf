@@ -7,46 +7,12 @@ resource "aws_security_group" "developers-sg" {
   description = "Developer team inbound access"
   vpc_id = var.vpc_main_pub_id
   ingress {
-    cidr_blocks = ["191.183.197.195/32"]
-    from_port = 22
-    to_port = 22
-    protocol = "tcp"
-    description = "inbound ssh for Fields"
-  }
-  ingress {
-    cidr_blocks = ["191.183.197.195/32"]
-    from_port = 5432
-    to_port = 5432
-    protocol = "tcp"
-    description = "inbound Postgres for Fields"
-  }
-  ingress {
-    cidr_blocks = ["191.187.43.229/32"]
-    from_port = 22
-    to_port = 22
-    protocol = "tcp"
-    description = "inbound ssh for Tevao"
-  }
-  ingress {
-    cidr_blocks = ["191.187.43.229/32"]
-    from_port = 5432
-    to_port = 5432
-    protocol = "tcp"
-    description = "inbound Postgres for Tevao"
-  }
-  ingress {
+    # cidr_blocks = var.ip_list
     cidr_blocks = ["186.204.118.100/32"]
     from_port = 22
     to_port = 22
     protocol = "tcp"
     description = "inbound ssh for Spaka"
-  }
-  ingress {
-    cidr_blocks = ["186.204.118.100/32"]
-    from_port = 5432
-    to_port = 5432
-    protocol = "tcp"
-    description = "inbound Postgres for Spaka"
   }
   egress {
     cidr_blocks = ["0.0.0.0/0"]
