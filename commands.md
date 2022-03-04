@@ -41,9 +41,10 @@ kubectl cluster-info --context kind-kind
 # SSH Tunneling to access RDS (postgres) on private subnet
 ## -> after terraform apply finishes with no errors
 ## chmod 400 d3-bid-ec2-kp.pem
+## -> keeps the pem file safe
+## cp -f d3-bid-ec2-kp.pem pem/
 ## -> copy the content of the key-pair (pem)
 ## ssh -i d3-bid-ec2-kp.pem ec2-user@<ip of bastion server>
-18.228.28.15
 ## -> in the bastion server (d3-bid-web-public-ec2)
 ## nano ~/.ssh/d3-bid-ec2-kp.pem
 ## -> paste the content of the key-pair (pem), save and exit

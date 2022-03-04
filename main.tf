@@ -5,11 +5,11 @@ terraform {
     aws = ">=3.74.0"
     local = ">=2.1.0"
   }
-  # backend "s3" {
-  #   bucket = "aws-terraform-poc"
-  #   key = "terraform.tfstate"
-  #   region = "sa-east-1"
-  # }
+  backend "s3" {
+    bucket = "aws-terraform-poc"
+    key = "terraform.tfstate"
+    region = "sa-east-1"
+  }
 }
 
 provider "aws" {
@@ -61,4 +61,39 @@ module "ec2" {
   sg_db_private_id = module.sg.sg_db_private_id
 
   ssh_key_pair = module.ssh.ssh_key_pair
+}
+
+module "rds" {
+  source = "./modules/rds"
+  prefix = var.prefix
+  client = var.client
+
+  # vpc_main_pub_id = module.vpc.vpc_main_pub_id
+
+  db_subnet_ids = module.vpc.db_subnet_ids
+  sg_db_private_id = module.sg.sg_db_private_id
+
+  engine = var.engine
+  engine_version = var.engine_version
+  username = var.username
+  db_name = var.db_name
+  port = var.port
+}
+
+
+module "eks" {
+  source = "./modules/eks"
+  prefix = var.prefix
+  client = var.client
+
+  vpc_main_pub_id = module.vpc.vpc_main_pub_id
+
+  retention_days = var.retention_days
+
+  web_subnet_ids = module.vpc.web_subnet_ids
+  web_cluster_name = var.web_cluster_name
+  web_desired_size = var.web_desired_size
+  web_max_size = var.web_max_size
+  web_min_size = var.web_min_size
+  sg_web_public_id = module.sg.sg_web_public_id
 }

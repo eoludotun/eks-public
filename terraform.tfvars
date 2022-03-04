@@ -25,3 +25,9 @@ api_min_size = 2
 region = "sa-east-1"
 
 ip_fake = "277.277.277.277/177"
+
+engine = "postgres"
+engine_version = "14.1"
+username = "d3bid"
+db_name = "bid"
+port = "5432"
