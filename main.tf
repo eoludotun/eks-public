@@ -79,3 +79,21 @@ module "rds" {
   db_name = var.db_name
   port = var.port
 }
+
+
+module "eks" {
+  source = "./modules/eks"
+  prefix = var.prefix
+  client = var.client
+
+  vpc_main_pub_id = module.vpc.vpc_main_pub_id
+
+  retention_days = var.retention_days
+
+  web_subnet_ids = module.vpc.web_subnet_ids
+  web_cluster_name = var.web_cluster_name
+  web_desired_size = var.web_desired_size
+  web_max_size = var.web_max_size
+  web_min_size = var.web_min_size
+  sg_web_public_id = module.sg.sg_web_public_id
+}
